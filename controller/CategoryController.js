@@ -4,7 +4,8 @@ class CategoryController {
     addNewCategory(req, res, next) {
         var newCategory = {
             categoryId: req.body.categoryId,
-            categoryName: req.body.categoryName
+            categoryName: req.body.categoryName,
+            cartId: req.body.cartId
         };
         var category = new Category(newCategory);
         category.save(function (e, item) {
