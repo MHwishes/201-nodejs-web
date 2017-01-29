@@ -1,6 +1,6 @@
 var Category = require('../models/category');
 
-export default class CategoryController {
+class CategoryController {
     addNewCategory(req, res, next) {
         var newCategory = {
             categoryId: req.body.categoryId,
@@ -62,3 +62,5 @@ export default class CategoryController {
 
     }
 }
+
+module.exports = CategoryController;

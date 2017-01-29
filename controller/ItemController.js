@@ -1,6 +1,6 @@
 var Item = require('../models/item');
 
-export default class ItemController {
+class ItemController {
 
     addNewItem(req, res, next) {
 
@@ -67,3 +67,5 @@ export default class ItemController {
         })
     }
 }
+
+module.exports = ItemController;

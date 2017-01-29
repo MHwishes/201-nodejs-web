@@ -1,6 +1,6 @@
-import Cart from '../models/cart';
+const Cart = require('../models/cart');
 
-export default class CartController {
+class CartController {
     addNewCart(req, res, next) {
         var newCart = {
             cartId: req.body.cartId,
@@ -63,3 +63,5 @@ export default class CartController {
     }
 
 }
+
+module.exports = CartController;
