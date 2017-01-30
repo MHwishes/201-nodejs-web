@@ -16,20 +16,27 @@ describe('CartController', ()=> {
 
     it('GET one  cart', (done) => {
         const item = {
-            "_id": "588889574bb46f5c02069829",
-            "cartId": "2",
-            "__v": 0,
+            "cartId": "1",
             "items": [
-                "1",
-                "11",
-                "5"
+                {
+                    "item": "1",
+                    "count": 1
+                },
+                {
+                    "item": "2",
+                    "count": 1
+                },
+                {
+                    "item": "3",
+                    "count": 1
+                }
             ]
         };
         request
-            .get('/cart/2')
+            .get('/cart/1')
             .expect(200)
             .expect((res) => {
-                res.body._id.should.equal(item._id);
+                res.body.cartId.should.equal(item.cartId);
             })
             .end(done)
     });
@@ -61,7 +68,7 @@ describe('CartController', ()=> {
     it('PUT one cart', (done)=> {
         const item = {
             id: '3',
-            name: "bbbb"
+            items:[{item:'hhhh',count:2}]
         };
         request
             .put('/cart/3')

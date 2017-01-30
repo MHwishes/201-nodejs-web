@@ -9,41 +9,41 @@ describe('ItemController', ()=> {
 
     it('GET all  Item', (done) => {
         request
-            .get('/item')
+            .get('/Item')
             .expect(200)
             .end(done)
     });
 
     it('GET one  Item', (done) => {
         const item = {
-            "_id": "58885f0459c1ff4af245a76a",
-            "id": "3",
-            "name": "mhong",
-            "__v": 0
+            "id": "1",
+            "name": "苹果",
+            "categoryId": "1"
         };
         request
-            .get('/item/3')
+            .get('/Item/1')
             .expect(200)
             .expect((res) => {
-                res.body._id.should.equal(item._id);
+                res.body.id.should.equal(item.id);
+                res.body.name.should.equal(item.name);
             })
             .end(done)
     });
 
-    it('DELETE one item', (done)=> {
+    it('DELETE one Item', (done)=> {
         request
-            .delete('/item/8')
+            .delete('/Item/1')
             .expect(204)
             .end(done);
     });
 
-    it('POST insertItem should return a item', (done) => {
+    it('POST insertItem should return a Item', (done) => {
         const item = {
             id: '8',
             name: '苹果'
         };
         request
-            .post('/item')
+            .post('/Item')
             .send(item)
             .expect(201)
             .expect((res) => {
@@ -54,13 +54,13 @@ describe('ItemController', ()=> {
             .end(done)
     });
 
-    it('PUT one item', (done)=> {
+    it('PUT one Item', (done)=> {
         const item = {
-            id: '1',
+            id: '10',
             name: "aaa"
         };
         request
-            .put('/item/5')
+            .put('/Item/2')
             .send(item)
             .expect(204)
             .end(done);

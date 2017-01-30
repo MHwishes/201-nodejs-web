@@ -15,16 +15,14 @@ describe('CategoryController', ()=> {
 
     it('GET one  category', (done) => {
         const item = {
-            "_id": "588882cff6b06e57c8de6aae",
             "categoryId": "1",
             "categoryName": "fruit",
-            "__v": 0
         };
         request
             .get('/category/1')
             .expect(200)
             .expect((res) => {
-                res.body._id.should.equal(item._id);
+                res.body.categoryId.should.equal(item.categoryId);
             })
             .end(done)
     });
@@ -50,7 +48,7 @@ describe('CategoryController', ()=> {
 
     it('DELETE one category', (done)=> {
         request
-            .delete('/category/6')
+            .delete('/category/2')
             .expect(204)
             .end(done);
     });

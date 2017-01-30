@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const cart = require('../models/cart');
-const category = require('../models/category');
-const item = require('../models/item');
+const Cart = require('../models/cart');
+const Category = require('../models/category');
+const Item = require('../models/item');
 const rawData = require('./raw-data/raw-data');
 
-const modelsMap = {item, category, cart};
+const modelsMap = {Item, Category, Cart};
 
 let docs = Object.keys(rawData);
 mongoose.connect('mongodb://localhost/supermarket');

@@ -1,4 +1,4 @@
-export default {
+data = {
     Item: [
         {
             id: '1',
@@ -41,7 +41,21 @@ export default {
                 item: '3',
                 count: 1
             }]
+        },
+        {
+            cartId: '2',
+            items: [{
+                item: '苹果',
+                count: 1
+            }, {
+                item: '梨',
+                count: 1
+            }, {
+                item: '草莓',
+                count: 1
+            }]
         }
     ]
 
-}
+};
+module.exports = data;
