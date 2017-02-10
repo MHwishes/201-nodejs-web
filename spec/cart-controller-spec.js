@@ -1,11 +1,16 @@
 const supertest = require('supertest');
 const app = require('../app');
 const request = supertest(app);
+const refresh = require('../tools/refreshMongo');
 require('should');
 
 const Item = require('../models/cart');
 
 describe('CartController', ()=> {
+
+    beforeEach(()=> {
+        refresh();
+    });
 
     it('GET all  Carts', (done) => {
         request
@@ -15,66 +20,55 @@ describe('CartController', ()=> {
     });
 
     it('GET one  cart', (done) => {
-        const item = {
-            "cartId": "1",
-            "items": [
-                {
-                    "item": "1",
-                    "count": 1
-                },
-                {
-                    "item": "2",
-                    "count": 1
-                },
-                {
-                    "item": "3",
-                    "count": 1
-                }
-            ]
-        };
         request
-            .get('/cart/1')
+            .get('/cart/587f0f2586653d19297d40c6')
             .expect(200)
             .expect((res) => {
-                res.body.cartId.should.equal(item.cartId);
+                res.body._id.should.equal('587f0f2586653d19297d40c6');
             })
             .end(done)
     });
 
-    it('DELETE one cart', (done)=> {
-        request
-            .delete('/cart/5')
-            .expect(204)
-            .end(done);
-    });
-
     it('POST insert cart should return a cart', (done) => {
-        const item = {
-            cartId: '5',
-            items:['apple','aaaa']
+        const cart = {
+            userId: '10',
+            items: [
+                {
+                    count: 4,
+                    item: '587f0f2586653d19297d40c2'
+                }
+            ]
         };
         request
             .post('/cart')
-            .send(item)
+            .send(cart)
             .expect(201)
-            .expect((res) => {
-                Item.find(item, (err, doc) => {
-                    res.body.should.equal(doc);
-                });
-            })
             .end(done)
     });
 
     it('PUT one cart', (done)=> {
         const item = {
-            id: '3',
-            items:[{item:'hhhh',count:2}]
+            userId: '15',
+            items: [
+                {
+                    count: 9,
+                    item: '587f0f2586653d19297d40c2'
+                }
+            ]
         };
         request
-            .put('/cart/3')
+            .put('/cart/587f0f2586653d19297d40c6')
             .send(item)
             .expect(204)
             .end(done);
-    })
+    });
+
+    it('DELETE one cart', (done)=> {
+        request
+            .delete('/cart/587f0f2586653d19297d40c6')
+            .expect(204)
+            .end(done);
+    });
+
 
 });

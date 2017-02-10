@@ -1,66 +1,70 @@
 const supertest = require('supertest');
 const app = require('../app');
 const request = supertest(app);
+const refresh = require('../tools/refreshMongo');
 require('should');
 
 const Item = require('../models/item');
 
 describe('ItemController', ()=> {
+    beforeEach(()=> {
+        refresh();
+    });
 
     it('GET all  Item', (done) => {
         request
-            .get('/Item')
+            .get('/item')
             .expect(200)
             .end(done)
     });
 
     it('GET one  Item', (done) => {
         const item = {
-            "id": "1",
-            "name": "苹果",
-            "categoryId": "1"
+            "_id": "587f0f2586653d19297d40c2",
+            "name": "钢笔",
+            "price": 12,
+            "category": "587f0f2586653d19297d40c8",
+            "__v": 0
         };
+
         request
-            .get('/Item/1')
+            .get('/item/587f0f2586653d19297d40c2')
             .expect(200)
             .expect((res) => {
-                res.body.id.should.equal(item.id);
-                res.body.name.should.equal(item.name);
+                res.body._id.should.equal(item._id);
             })
+            .end(done)
+    });
+
+    it('POST insertItem should return a Item', (done) => {
+        const item = {
+            name: 'mahong',
+            price: 100,
+            category: '587f0f2586653d19297d40c8'
+        };
+        request
+            .post('/item')
+            .send(item)
+            .expect(201)
             .end(done)
     });
 
     it('DELETE one Item', (done)=> {
         request
-            .delete('/Item/1')
+            .delete('/item/587f0f2586653d19297d40c2')
             .expect(204)
             .end(done);
     });
 
-    it('POST insertItem should return a Item', (done) => {
-        const item = {
-            id: '8',
-            name: '苹果'
-        };
-        request
-            .post('/Item')
-            .send(item)
-            .expect(201)
-            .expect((res) => {
-                Item.find(item, (err, doc) => {
-                    res.body.should.equal(doc);
-                });
-            })
-            .end(done)
-    });
 
     it('PUT one Item', (done)=> {
         const item = {
-            id: '10',
-            name: "aaa"
+            name: 'aaaa',
+            price: 34,
+            category: '587f0f2586653d19297d40c9'
         };
         request
-            .put('/Item/2')
+            .put('/item/587f0f2586653d19297d40c3')
             .send(item)
             .expect(204)
             .end(done);

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var categorySchema = mongoose.Schema({
-    categoryName: String
+    name: String
 });
 
 module.exports = mongoose.model("Category", categorySchema);

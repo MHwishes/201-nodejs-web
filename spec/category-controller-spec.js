@@ -1,11 +1,17 @@
 const supertest = require('supertest');
 const app = require('../app');
 const request = supertest(app);
+const refresh = require('../tools/refreshMongo');
+
 require('should');
 
 const Category = require('../models/category');
 
 describe('CategoryController', ()=> {
+    beforeEach(()=> {
+        refresh();
+    });
+
     it('GET all categorys', (done) => {
         request
             .get('/category')
@@ -15,14 +21,15 @@ describe('CategoryController', ()=> {
 
     it('GET one  category', (done) => {
         const item = {
-            "categoryId": "1",
-            "categoryName": "fruit",
+            "_id": "587f0f2586653d19297d40c8",
+            "name": "文具",
+            "__v": 0
         };
         request
-            .get('/category/1')
+            .get('/category/587f0f2586653d19297d40c8')
             .expect(200)
             .expect((res) => {
-                res.body.categoryId.should.equal(item.categoryId);
+                res.body._id.should.equal(item._id);
             })
             .end(done)
     });
@@ -30,37 +37,28 @@ describe('CategoryController', ()=> {
 
     it('POST insert category should return a category', (done) => {
         const category = {
-            categoryId: '2',
-            categoryName: 'fruit',
-            cartId: '1'
+            name:"bbbb"
         };
         request
             .post('/category')
             .send(category)
             .expect(201)
-            .expect((res) => {
-                Category.find(category, (err, doc) => {
-                    res.body.should.equal(doc);
-                });
-            })
             .end(done)
     });
 
     it('DELETE one category', (done)=> {
         request
-            .delete('/category/2')
+            .delete('/category/587f0f2586653d19297d40c9')
             .expect(204)
             .end(done);
     });
 
     it('PUT one category', (done)=> {
         const item = {
-            categoryId: '100',
-            categoryName: '8888',
-            cartId: '1'
+            name:"张三"
         };
         request
-            .put('/category/100')
+            .put('/category/587f0f2586653d19297d40c8')
             .send(item)
             .expect(204)
             .end(done);
