@@ -2,25 +2,18 @@ var Category = require('../models/category');
 
 class CategoryController {
     addNewCategory(req, res, next) {
-        var newCategory = {
-            categoryId: req.body.categoryId,
-            categoryName: req.body.categoryName,
-            cartId: req.body.cartId
-        };
-        var category = new Category(newCategory);
-        category.save(function (e, item) {
-            if (e) {
-                res.status(400).end();
+        Category.create(req.body, (err, item) => {
+            if (err) {
+                return res.status(400).end();
             }
-            res.status(201).send(item);
-
+            return res.status(201).send(item);
         });
     }
 
     getOneCategory(req, res, next) {
 
         var categoryId = req.params.id;
-        Category.findOne({categoryId: categoryId}, function (e, item) {
+        Category.findOne({_id: categoryId}, function (e, item) {
             if (e) {
                 res.status(404).end();
             }
@@ -39,7 +32,7 @@ class CategoryController {
 
     deleteOneCategory(req, res, next) {
         var categoryId = req.params.id;
-        Category.remove({categoryId: categoryId}, function (err, item) {
+        Category.remove({_id: categoryId}, function (err, item) {
             if (err) {
                 res.status(400).end();
             }
@@ -49,11 +42,10 @@ class CategoryController {
 
     updateOneCategory(req, res, next) {
         var categoryId = req.params.id;
-        var categoryName = req.body.categoryName;
 
         Category.update({
-            categoryId: categoryId
-        }, {categoryName: categoryName}, function (e, item) {
+            _id: categoryId
+        }, req.body, function (e, item) {
             if (e) {
                 res.sendStatus(400).end();
             }

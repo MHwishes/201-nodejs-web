@@ -1,9 +1,7 @@
 var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema({
-    categoryId: String,
-    categoryName: String,
-    cartId: String
+var categorySchema = mongoose.Schema({
+    categoryName: String
 });
 
-module.exports = mongoose.model("Category", Schema);
+module.exports = mongoose.model("Category", categorySchema);

@@ -2,24 +2,17 @@ const Cart = require('../models/cart');
 
 class CartController {
     addNewCart(req, res, next) {
-        var newCart = {
-            cartId: req.body.cartId,
-            items: req.body.items
-        };
-        var cart = new Cart(newCart);
-        cart.save(function (e, item) {
-            if (e) {
-                res.status(400).end();
+        Cart.create(req.body, (err, item) => {
+            if (err) {
+                return res.status(400).end();
             }
-
-            res.status(201).send(item);
-
+            return res.status(201).send(item);
         });
     }
 
     getOneCart(req, res, next) {
         var cartId = req.params.id;
-        Cart.findOne({cartId: cartId}, function (e, item) {
+        Cart.findOne({_id: cartId}, function (e, item) {
             if (e) {
                 res.status(404).end();
             }
@@ -39,7 +32,7 @@ class CartController {
 
     deleteOneCart(req, res, next) {
         var cartId = req.params.id;
-        Cart.remove({cartId: cartId}, function (err, item) {
+        Cart.remove({_id: cartId}, function (err, item) {
             if (err) {
                 res.status(400).end();
             }
@@ -49,11 +42,9 @@ class CartController {
 
     updateOneCart(req, res, next) {
         var cartId = req.params.id;
-        var items = req.body.items;
-
         Cart.update({
-            cartId: cartId
-        }, {items: items}, function (e, item) {
+            _id: cartId
+        }, req.body, function (e, item) {
             if (e) {
                 res.sendStatus(400).end();
             }
