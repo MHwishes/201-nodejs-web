@@ -2,7 +2,7 @@ var Item = require('../models/item');
 
 class ItemController {
 
-    addNewItem(req, res, next) {
+    create(req, res, next) {
         Item.create(req.body, (err, item) => {
             if (err) {
                 return res.sendStatus(400);
@@ -22,7 +22,7 @@ class ItemController {
         });
     }
 
-    getOneItem(req, res, next) {
+    getOne(req, res, next) {
         var itemId = req.params.id;
 
         Item.findOne({_id: itemId}, function (e, item) {
@@ -34,7 +34,7 @@ class ItemController {
 
     }
 
-    deleteOneItem(req, res, next) {
+    delete(req, res, next) {
         var itemId = req.params.id;
         Item.remove({
             _id: itemId
@@ -46,7 +46,7 @@ class ItemController {
         })
     }
 
-    updateOneItem(req, res, next) {
+    update(req, res, next) {
         var itemId = req.params.id;
         Item.update({
             _id: itemId

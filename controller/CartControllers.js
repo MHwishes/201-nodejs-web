@@ -1,7 +1,7 @@
 const Cart = require('../models/cart');
 
 class CartController {
-    addNewCart(req, res, next) {
+    create(req, res, next) {
         Cart.create(req.body, (err, item) => {
             if (err) {
                 return res.sendStatus(400);
@@ -10,7 +10,7 @@ class CartController {
         });
     }
 
-    getOneCart(req, res, next) {
+    getOne(req, res, next) {
         var cartId = req.params.id;
         Cart.findOne({_id: cartId}, function (e, item) {
             if (e) {
@@ -21,7 +21,7 @@ class CartController {
 
     }
 
-    getAllCarts(req, res, next) {
+    getAll(req, res, next) {
         Cart.find(function (err, item) {
             if (err) {
                 res.sendStatus(404);
@@ -30,7 +30,7 @@ class CartController {
         })
     }
 
-    deleteOneCart(req, res, next) {
+    delete(req, res, next) {
         var cartId = req.params.id;
         Cart.remove({_id: cartId}, function (err, item) {
             if (err) {
@@ -40,7 +40,7 @@ class CartController {
         })
     }
 
-    updateOneCart(req, res, next) {
+    update(req, res, next) {
         var cartId = req.params.id;
         Cart.update({
             _id: cartId

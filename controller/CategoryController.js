@@ -1,7 +1,7 @@
 var Category = require('../models/category');
 
 class CategoryController {
-    addNewCategory(req, res, next) {
+    create(req, res, next) {
         Category.create(req.body, (err, item) => {
             if (err) {
                 return res.sendStatus(400);
@@ -10,7 +10,7 @@ class CategoryController {
         });
     }
 
-    getOneCategory(req, res, next) {
+    getOne(req, res, next) {
 
         var categoryId = req.params.id;
         Category.findOne({_id: categoryId}, function (e, item) {
@@ -21,7 +21,7 @@ class CategoryController {
         });
     }
 
-    getAllCategorys(req, res, next) {
+    getAll(req, res, next) {
         Category.find(function (err, item) {
             if (err) {
                 res.sendStatus(404);
@@ -30,7 +30,7 @@ class CategoryController {
         })
     }
 
-    deleteOneCategory(req, res, next) {
+    delete(req, res, next) {
         var categoryId = req.params.id;
         Category.remove({_id: categoryId}, function (err, item) {
             if (err) {
@@ -40,7 +40,7 @@ class CategoryController {
         })
     }
 
-    updateOneCategory(req, res, next) {
+    update(req, res, next) {
         var categoryId = req.params.id;
 
         Category.update({
