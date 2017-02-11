@@ -4,7 +4,7 @@ class CategoryController {
     addNewCategory(req, res, next) {
         Category.create(req.body, (err, item) => {
             if (err) {
-                return res.status(400).end();
+                return res.sendStatus(400);
             }
             return res.status(201).send(item);
         });
@@ -15,7 +15,7 @@ class CategoryController {
         var categoryId = req.params.id;
         Category.findOne({_id: categoryId}, function (e, item) {
             if (e) {
-                res.status(404).end();
+                res.sendStatus(404);
             }
             res.status(200).send(item);
         });
@@ -24,7 +24,7 @@ class CategoryController {
     getAllCategorys(req, res, next) {
         Category.find(function (err, item) {
             if (err) {
-                res.status(404).end();
+                res.sendStatus(404);
             }
             res.status(200).send(item);
         })
@@ -34,9 +34,9 @@ class CategoryController {
         var categoryId = req.params.id;
         Category.remove({_id: categoryId}, function (err, item) {
             if (err) {
-                res.status(400).end();
+                res.sendStatus(400);
             }
-            res.status(204).end();
+            res.sendStatus(204);
         })
     }
 
@@ -47,7 +47,7 @@ class CategoryController {
             _id: categoryId
         }, req.body, function (e, item) {
             if (e) {
-                res.sendStatus(400).end();
+                res.sendStatus(400);
             }
             res.status(204).send(item);
 

@@ -5,7 +5,7 @@ class ItemController {
     addNewItem(req, res, next) {
         Item.create(req.body, (err, item) => {
             if (err) {
-                return res.status(400).end();
+                return res.sendStatus(400);
             }
             return res.status(201).send(item);
         });
@@ -15,7 +15,7 @@ class ItemController {
     getAll(req, res, next) {
         Item.find(function (e, item) {
             if (e) {
-                res.status(404).end();
+                res.sendStatus(404);
             }
 
             res.status(200).send(item);
@@ -27,7 +27,7 @@ class ItemController {
 
         Item.findOne({_id: itemId}, function (e, item) {
             if (e) {
-                res.status(404).end();
+                res.sendStatus(404);
             }
             res.status(200).send(item);
         });
@@ -40,9 +40,9 @@ class ItemController {
             _id: itemId
         }, function (e, item) {
             if (e) {
-                res.status(400).end();
+                res.sendStatus(400);
             }
-            res.status(204).end();
+            res.sendStatus(204);
         })
     }
 
@@ -52,7 +52,7 @@ class ItemController {
             _id: itemId
         }, req.body, function (e, item) {
             if (e) {
-                res.sendStatus(400).end();
+                res.sendStatus(400);
             }
             res.status(204).send(item);
         })

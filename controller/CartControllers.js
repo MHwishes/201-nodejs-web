@@ -4,7 +4,7 @@ class CartController {
     addNewCart(req, res, next) {
         Cart.create(req.body, (err, item) => {
             if (err) {
-                return res.status(400).end();
+                return res.sendStatus(400);
             }
             return res.status(201).send(item);
         });
@@ -14,7 +14,7 @@ class CartController {
         var cartId = req.params.id;
         Cart.findOne({_id: cartId}, function (e, item) {
             if (e) {
-                res.status(404).end();
+                res.sendStatus(404);
             }
             res.status(200).send(item);
         });
@@ -24,7 +24,7 @@ class CartController {
     getAllCarts(req, res, next) {
         Cart.find(function (err, item) {
             if (err) {
-                res.status(404).end();
+                res.sendStatus(404);
             }
             res.status(200).send(item);
         })
@@ -34,9 +34,9 @@ class CartController {
         var cartId = req.params.id;
         Cart.remove({_id: cartId}, function (err, item) {
             if (err) {
-                res.status(400).end();
+                res.sendStatus(400);
             }
-            res.status(204).end();
+            res.sendStatus(204);
         })
     }
 
@@ -46,7 +46,7 @@ class CartController {
             _id: cartId
         }, req.body, function (e, item) {
             if (e) {
-                res.sendStatus(400).end();
+                res.sendStatus(400);
             }
             res.status(204).send(item);
         })
