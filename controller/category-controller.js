@@ -1,12 +1,13 @@
 var Category = require('./category');
+const constant=require('../config/constant');
 
 class CategoryController {
     create(req, res, next) {
         Category.create(req.body, (err, item) => {
             if (err) {
-                return res.sendStatus(400);
+                return res.next(err);
             }
-            return res.status(201).send(item);
+            return res.status(constant.httpCode.CREATED).send(item);
         });
     }
 
@@ -15,18 +16,18 @@ class CategoryController {
         var categoryId = req.params.id;
         Category.findOne({_id: categoryId}, function (e, item) {
             if (e) {
-                res.sendStatus(404);
+                res.next(e);
             }
-            res.status(200).send(item);
+            res.status(constant.httpCode.OK).send(item);
         });
     }
 
     getAll(req, res, next) {
         Category.find(function (err, item) {
             if (err) {
-                res.sendStatus(404);
+                return res.next(err);
             }
-            res.status(200).send(item);
+            res.status(constant.httpCode.ok).send(item);
         })
     }
 
@@ -34,9 +35,9 @@ class CategoryController {
         var categoryId = req.params.id;
         Category.remove({_id: categoryId}, function (err, item) {
             if (err) {
-                res.sendStatus(400);
+                return res.next(err);
             }
-            res.sendStatus(204);
+            res.sendStatus(constant.httpCode.NO_CONTENT);
         })
     }
 
@@ -47,9 +48,9 @@ class CategoryController {
             _id: categoryId
         }, req.body, function (e, item) {
             if (e) {
-                res.sendStatus(400);
+                return res.next(e);
             }
-            res.status(204).send(item);
+            res.status(constant.httpCode.NO_CONTENT).send(item);
 
         })
 

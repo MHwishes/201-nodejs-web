@@ -1,13 +1,15 @@
-var Item = require('./item');
+const Item = require('./item');
+const constant=require('../config/constant');
+
 
 class ItemController {
 
     create(req, res, next) {
         Item.create(req.body, (err, item) => {
             if (err) {
-                return res.sendStatus(400);
+                res.next(err);
             }
-            return res.status(201).send(item);
+            return res.status(constant.httpCode.CREATED).send(item);
         });
     }
 
@@ -15,10 +17,10 @@ class ItemController {
     getAll(req, res, next) {
         Item.find(function (e, item) {
             if (e) {
-                res.sendStatus(404);
+                res.next(e);
             }
 
-            res.status(200).send(item);
+            res.status(constant.httpCode.ok).send(item);
         });
     }
 
@@ -27,9 +29,9 @@ class ItemController {
 
         Item.findOne({_id: itemId}, function (e, item) {
             if (e) {
-                res.sendStatus(404);
+                res.next(e);
             }
-            res.status(200).send(item);
+            res.status(constant.httpCode.ok).send(item);
         });
 
     }
@@ -40,9 +42,9 @@ class ItemController {
             _id: itemId
         }, function (e, item) {
             if (e) {
-                res.sendStatus(400);
+                res.next(e);
             }
-            res.sendStatus(204);
+            res.sendStatus(constant.httpCode.NO_CONTENT);
         })
     }
 
@@ -52,9 +54,9 @@ class ItemController {
             _id: itemId
         }, req.body, function (e, item) {
             if (e) {
-                res.sendStatus(400);
+                res.next(e)
             }
-            res.status(204).send(item);
+            res.status(constant.httpCode.NO_CONTENT).send(item);
         })
     }
 }

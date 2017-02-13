@@ -1,12 +1,13 @@
 const Cart = require('./cart');
+const constant=require('../config/constant');
 
 class CartController {
     create(req, res, next) {
         Cart.create(req.body, (err, item) => {
             if (err) {
-                return res.sendStatus(400);
+                return res.next(err);
             }
-            return res.status(201).send(item);
+            return res.status(constant.httpCode.CREATED).send(item);
         });
     }
 
@@ -14,9 +15,9 @@ class CartController {
         var cartId = req.params.id;
         Cart.findOne({_id: cartId}, function (e, item) {
             if (e) {
-                res.sendStatus(404);
+                res.next(e);
             }
-            res.status(200).send(item);
+            res.status(constant.httpCode.OK).send(item);
         });
 
     }
@@ -24,9 +25,9 @@ class CartController {
     getAll(req, res, next) {
         Cart.find(function (err, item) {
             if (err) {
-                res.sendStatus(404);
+                res.next(err);
             }
-            res.status(200).send(item);
+            res.status(constant.httpCode.OK).send(item);
         })
     }
 
@@ -34,9 +35,9 @@ class CartController {
         var cartId = req.params.id;
         Cart.remove({_id: cartId}, function (err, item) {
             if (err) {
-                res.sendStatus(400);
+                res.next(err);
             }
-            res.sendStatus(204);
+            res.sendStatus(constant.httpCode.NO_CONTENT);
         })
     }
 
@@ -46,9 +47,9 @@ class CartController {
             _id: cartId
         }, req.body, function (e, item) {
             if (e) {
-                res.sendStatus(400);
+                res.next(e);
             }
-            res.status(204).send(item);
+            res.status(constant.httpCode.NO_CONTENT).send(item);
         })
 
     }
