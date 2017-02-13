@@ -1,8 +1,8 @@
-const Cart = require('../models/cart');
+var Category = require('./category');
 
-class CartController {
+class CategoryController {
     create(req, res, next) {
-        Cart.create(req.body, (err, item) => {
+        Category.create(req.body, (err, item) => {
             if (err) {
                 return res.sendStatus(400);
             }
@@ -11,18 +11,18 @@ class CartController {
     }
 
     getOne(req, res, next) {
-        var cartId = req.params.id;
-        Cart.findOne({_id: cartId}, function (e, item) {
+
+        var categoryId = req.params.id;
+        Category.findOne({_id: categoryId}, function (e, item) {
             if (e) {
                 res.sendStatus(404);
             }
             res.status(200).send(item);
         });
-
     }
 
     getAll(req, res, next) {
-        Cart.find(function (err, item) {
+        Category.find(function (err, item) {
             if (err) {
                 res.sendStatus(404);
             }
@@ -31,8 +31,8 @@ class CartController {
     }
 
     delete(req, res, next) {
-        var cartId = req.params.id;
-        Cart.remove({_id: cartId}, function (err, item) {
+        var categoryId = req.params.id;
+        Category.remove({_id: categoryId}, function (err, item) {
             if (err) {
                 res.sendStatus(400);
             }
@@ -41,18 +41,19 @@ class CartController {
     }
 
     update(req, res, next) {
-        var cartId = req.params.id;
-        Cart.update({
-            _id: cartId
+        var categoryId = req.params.id;
+
+        Category.update({
+            _id: categoryId
         }, req.body, function (e, item) {
             if (e) {
                 res.sendStatus(400);
             }
             res.status(204).send(item);
+
         })
 
     }
-
 }
 
-module.exports = CartController;
+module.exports = CategoryController;

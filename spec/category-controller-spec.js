@@ -1,11 +1,11 @@
 const supertest = require('supertest');
 const app = require('../app');
 const request = supertest(app);
-const refresh = require('../tools/refreshMongo');
+const refresh = require('../tools/refresh-mongo');
 
 require('should');
 
-const Category = require('../models/category');
+const Category = require('./category');
 
 describe('CategoryController', ()=> {
     beforeEach(()=> {
