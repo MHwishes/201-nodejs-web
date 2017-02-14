@@ -1,5 +1,6 @@
-var Category = require('./category');
-const constant=require('../config/constant');
+var Category = require('../model/category');
+const constant = require('../config/constant');
+const async = require('async');
 
 class CategoryController {
     create(req, res, next) {
@@ -23,12 +24,20 @@ class CategoryController {
     }
 
     getAll(req, res, next) {
-        Category.find(function (err, item) {
-            if (err) {
-                return res.next(err);
+        async.series({
+            items: (cb)=> {
+                Category.find({}, cb)
+
+            },
+            totalCount: (cb)=> {
+                Category.count(cb);
             }
-            res.status(constant.httpCode.ok).send(item);
-        })
+        }, (err, result)=> {
+            if (err) {
+                return next(err);
+            }
+            return res.status(constant.httpCode.OK).send(result);
+        });
     }
 
     delete(req, res, next) {

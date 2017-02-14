@@ -1,5 +1,6 @@
-const Cart = require('./cart');
-const constant=require('../config/constant');
+const Cart = require('../model/cart');
+const constant = require('../config/constant');
+const async = require('async');
 
 class CartController {
     create(req, res, next) {
@@ -23,12 +24,21 @@ class CartController {
     }
 
     getAll(req, res, next) {
-        Cart.find(function (err, item) {
-            if (err) {
-                res.next(err);
+        async.series({
+            items: (cb)=> {
+                Cart.find({})
+                    .populate('Item')
+                    .exec(cb)
+            },
+            totalCount: (cb)=> {
+                Cart.count(cb);
             }
-            res.status(constant.httpCode.OK).send(item);
-        })
+        }, (err, result)=> {
+            if (err) {
+                return next(err);
+            }
+            return res.status(constant.httpCode.OK).send(result);
+        });
     }
 
     delete(req, res, next) {

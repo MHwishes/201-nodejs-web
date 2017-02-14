@@ -1,6 +1,6 @@
-const Item = require('./item');
-const constant=require('../config/constant');
-
+const Item = require('../model/item');
+const constant = require('../config/constant');
+const async = require('async');
 
 class ItemController {
 
@@ -15,12 +15,20 @@ class ItemController {
 
 
     getAll(req, res, next) {
-        Item.find(function (e, item) {
-            if (e) {
-                res.next(e);
+        async.series({
+            items: (cb)=> {
+                Item.find({})
+                    .populate('Category')
+                    .exec(cb)
+            },
+            totalCount: (cb)=> {
+                Item.count(cb);
             }
-
-            res.status(constant.httpCode.ok).send(item);
+        }, (err, result)=> {
+            if (err) {
+                return next(err);
+            }
+            return res.status(constant.httpCode.OK).send(result);
         });
     }
 
