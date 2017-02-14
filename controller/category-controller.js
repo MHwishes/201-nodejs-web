@@ -19,6 +19,9 @@ class CategoryController {
             if (e) {
                 res.next(e);
             }
+            if (!item) {
+                return res.sendStatus(constant.httpCode.NOT_FOUND);
+            }
             res.status(constant.httpCode.OK).send(item);
         });
     }
@@ -46,6 +49,9 @@ class CategoryController {
             if (err) {
                 return res.next(err);
             }
+            if (!item) {
+                return res.sendStatus(constant.httpCode.NOT_FOUND);
+            }
             res.sendStatus(constant.httpCode.NO_CONTENT);
         })
     }
@@ -58,6 +64,9 @@ class CategoryController {
         }, req.body, function (e, item) {
             if (e) {
                 return res.next(e);
+            }
+            if (!item) {
+                return res.sendStatus(constant.httpCode.NOT_FOUND);
             }
             res.status(constant.httpCode.NO_CONTENT).send(item);
 

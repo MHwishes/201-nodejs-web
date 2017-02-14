@@ -39,6 +39,9 @@ class ItemController {
             if (e) {
                 res.next(e);
             }
+            if (!item) {
+                return res.sendStatus(constant.httpCode.NOT_FOUND);
+            }
             res.status(constant.httpCode.ok).send(item);
         });
 
@@ -52,6 +55,9 @@ class ItemController {
             if (e) {
                 res.next(e);
             }
+            if (!item) {
+                return res.sendStatus(constant.httpCode.NOT_FOUND);
+            }
             res.sendStatus(constant.httpCode.NO_CONTENT);
         })
     }
@@ -63,6 +69,9 @@ class ItemController {
         }, req.body, function (e, item) {
             if (e) {
                 res.next(e)
+            }
+            if (!item) {
+                return res.sendStatus(constant.httpCode.NOT_FOUND);
             }
             res.status(constant.httpCode.NO_CONTENT).send(item);
         })
