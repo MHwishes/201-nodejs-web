@@ -42,7 +42,7 @@ class ItemController {
             if (!item) {
                 return res.sendStatus(constant.httpCode.NOT_FOUND);
             }
-            res.status(constant.httpCode.ok).send(item);
+            return res.status(constant.httpCode.OK).send(item);
         });
 
     }
