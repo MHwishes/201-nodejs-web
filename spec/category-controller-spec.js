@@ -5,7 +5,6 @@ const refresh = require('../tools/refresh-mongo');
 
 require('should');
 
-const Category = require('./category');
 
 describe('CategoryController', ()=> {
     beforeEach(()=> {

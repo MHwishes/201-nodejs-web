@@ -4,8 +4,6 @@ const request = supertest(app);
 const refresh = require('../tools/refresh-mongo');
 require('should');
 
-const Item = require('./cart');
-
 describe('CartController', ()=> {
 
     beforeEach(()=> {
