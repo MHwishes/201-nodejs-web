@@ -15,7 +15,7 @@ class CategoryController {
     getOne(req, res, next) {
 
         var categoryId = req.params.id;
-        Category.findOne({_id: categoryId}, function (e, item) {
+        Category.findById({_id: categoryId}, function (e, item) {
             if (e) {
                 res.next(e);
             }
@@ -28,12 +28,12 @@ class CategoryController {
 
     getAll(req, res, next) {
         async.series({
-            items: (cb)=> {
-                Category.find({}, cb)
+            items: (done)=> {
+                Category.find({}, done)
 
             },
-            totalCount: (cb)=> {
-                Category.count(cb);
+            totalCount: (done)=> {
+                Category.count(done);
             }
         }, (err, result)=> {
             if (err) {
@@ -45,7 +45,7 @@ class CategoryController {
 
     delete(req, res, next) {
         var categoryId = req.params.id;
-        Category.remove({_id: categoryId}, function (err, item) {
+        Category.findByIdAndRemove({_id: categoryId}, function (err, item) {
             if (err) {
                 return res.next(err);
             }
@@ -59,7 +59,7 @@ class CategoryController {
     update(req, res, next) {
         var categoryId = req.params.id;
 
-        Category.update({
+        Category.findByIdAndUpdate({
             _id: categoryId
         }, req.body, function (e, item) {
             if (e) {

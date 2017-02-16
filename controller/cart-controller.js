@@ -14,7 +14,7 @@ class CartController {
 
     getOne(req, res, next) {
         var cartId = req.params.id;
-        Cart.findOne({_id: cartId}, function (e, item) {
+        Cart.findById({_id: cartId}, function (e, item) {
             if (e) {
                 res.next(e);
             }
@@ -28,13 +28,13 @@ class CartController {
 
     getAll(req, res, next) {
         async.series({
-            items: (cb)=> {
+            items: (done)=> {
                 Cart.find({})
                     .populate('Item')
-                    .exec(cb)
+                    .exec(done)
             },
-            totalCount: (cb)=> {
-                Cart.count(cb);
+            totalCount: (done)=> {
+                Cart.count(done);
             }
         }, (err, result)=> {
             if (err) {
@@ -46,7 +46,7 @@ class CartController {
 
     delete(req, res, next) {
         var cartId = req.params.id;
-        Cart.remove({_id: cartId}, function (err, item) {
+        Cart.findByIdAndRemove({_id: cartId}, function (err, item) {
             if (err) {
                 res.next(err);
             }
@@ -59,7 +59,7 @@ class CartController {
 
     update(req, res, next) {
         var cartId = req.params.id;
-        Cart.update({
+        Cart.findByIdAndUpdate({
             _id: cartId
         }, req.body, function (e, item) {
             if (e) {

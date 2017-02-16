@@ -16,13 +16,13 @@ class ItemController {
 
     getAll(req, res, next) {
         async.series({
-            items: (cb)=> {
+            items: (done)=> {
                 Item.find({})
                     .populate('Category')
-                    .exec(cb)
+                    .exec(done)
             },
-            totalCount: (cb)=> {
-                Item.count(cb);
+            totalCount: (done)=> {
+                Item.count(done);
             }
         }, (err, result)=> {
             if (err) {
@@ -35,7 +35,7 @@ class ItemController {
     getOne(req, res, next) {
         var itemId = req.params.id;
 
-        Item.findOne({_id: itemId}, function (e, item) {
+        Item.findById({_id: itemId}, function (e, item) {
             if (e) {
                 res.next(e);
             }
@@ -49,7 +49,7 @@ class ItemController {
 
     delete(req, res, next) {
         var itemId = req.params.id;
-        Item.remove({
+        Item.findByIdAndRemove({
             _id: itemId
         }, function (e, item) {
             if (e) {
@@ -64,7 +64,7 @@ class ItemController {
 
     update(req, res, next) {
         var itemId = req.params.id;
-        Item.update({
+        Item.findByIdAndUpdate({
             _id: itemId
         }, req.body, function (e, item) {
             if (e) {
