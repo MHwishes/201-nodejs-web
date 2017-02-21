@@ -22,7 +22,7 @@ class CategoryController {
             if (!item) {
                 return res.sendStatus(constant.httpCode.NOT_FOUND);
             }
-           return res.status(constant.httpCode.OK).send(item);
+            return res.status(constant.httpCode.OK).send(item);
         });
     }
 
@@ -44,15 +44,31 @@ class CategoryController {
     }
 
     delete(req, res, next) {
-        var categoryId = req.params.id;
-        Category.findByIdAndRemove({_id: categoryId}, function (err, item) {
-            if (err) {
-                return res.next(err);
+        async.waterfall([(done)=> {
+            Category.findOne({_id: req.params.id}, (e, item)=> {
+                if (e) {
+                    done(true, null);
+                }
+                else {
+                    Category.findByIdAndRemove({_id: req.params.id}, (err, doc)=> {
+                        if (!doc) {
+                            return done(false, null);
+                        }
+                        done(err, doc);
+                    })
+                }
+            });
+        }], (err)=> {
+            if (err === true) {
+                return res.sendStatus(constant.httpCode.BAD_REQUEST);
             }
-            if (!item) {
+            if (err === false) {
                 return res.sendStatus(constant.httpCode.NOT_FOUND);
             }
-            res.sendStatus(constant.httpCode.NO_CONTENT);
+            if (err) {
+                return next(err);
+            }
+            return res.sendStatus(constant.httpCode.NO_CONTENT);
         })
     }
 
