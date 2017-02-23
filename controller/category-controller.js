@@ -1,4 +1,5 @@
 var Category = require('../model/category');
+const Item = require('../model/item');
 const constant = require('../config/constant');
 const async = require('async');
 
@@ -45,7 +46,7 @@ class CategoryController {
 
     delete(req, res, next) {
         async.waterfall([(done)=> {
-            Category.findOne({_id: req.params.id}, (e, item)=> {
+            Item.findOne({Category: req.params.id}, (e, item)=> {
                 if (e) {
                     done(true, null);
                 }

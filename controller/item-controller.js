@@ -48,33 +48,16 @@ class ItemController {
     }
 
     delete(req, res, next) {
-        async.waterfall([(done)=> {
-            Item.findOne({_id: req.params.id}, (e, item)=> {
-                if (e) {
-                    done(true, null);
-                }
-                else {
-                    Item.findByIdAndRemove({_id: req.params.id}, (err, doc)=> {
-                        if (!doc) {
-                            return done(false, null);
-                        }
-                        done(err, doc);
-                    })
-                }
-            });
-        }], (err)=> {
-            if (err === true) {
-                return res.sendStatus(constant.httpCode.BAD_REQUEST);
+        Item.findByIdAndRemove({_id: req.params.id}, (e, result)=> {
+            if (e) {
+                next(e)
             }
-            if (err === false) {
-                return res.sendStatus(constant.httpCode.NOT_FOUND);
+            if (!result) {
+                res.sendStatus(constant.httpCode.NOT_FOUND)
             }
-            if (err) {
-                return next(err);
-            }
-            return res.sendStatus(constant.httpCode.NO_CONTENT);
+            res.sendStatus(constant.httpCode.NO_CONTENT);
         })
-    }
+    };
 
     update(req, res, next) {
         var itemId = req.params.id;
