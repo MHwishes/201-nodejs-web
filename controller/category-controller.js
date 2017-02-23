@@ -1,37 +1,14 @@
-var Category = require('../model/category');
-const Item = require('../model/item');
-const constant = require('../config/constant');
 const async = require('async');
 
+const Category = require('../model/category');
+const Item = require('../model/item');
+const constant = require('../config/constant');
+
 class CategoryController {
-  create(req, res, next) {
-    Category.create(req.body, (err, item) => {
-      if (err) {
-        return res.next(err);
-      }
-      return res.status(constant.httpCode.CREATED).send(item);
-    });
-  }
-
-  getOne(req, res, next) {
-
-    var categoryId = req.params.id;
-    Category.findById({_id: categoryId}, function (e, item) {
-      if (e) {
-        res.next(e);
-      }
-      if (!item) {
-        return res.sendStatus(constant.httpCode.NOT_FOUND);
-      }
-      return res.status(constant.httpCode.OK).send(item);
-    });
-  }
-
   getAll(req, res, next) {
     async.series({
       items: (done)=> {
-        Category.find({}, done)
-
+        Category.find({}, done);
       },
       totalCount: (done)=> {
         Category.count(done);
@@ -44,22 +21,41 @@ class CategoryController {
     });
   }
 
+  getOne(req, res, next) {
+
+    const categoryId = req.params.categoryId;
+    Category.findById(categoryId, (err, doc)=> {
+      if (err) {
+        return next(err);
+      }
+      if (!doc) {
+        return res.sendStatus(constant.httpCode.NOT_FOUND);
+      }
+      return res.status(constant.httpCode.OK).send(doc);
+    });
+  }
+
+
   delete(req, res, next) {
-    async.waterfall([(done)=> {
-      Item.findOne({Category: req.params.id}, (e, item)=> {
-        if (e) {
+    const category = req.params.categoryId;
+
+    async.waterfall([
+      (done) => {
+        Item.findOne({category}, done);
+      },
+      (docs, done) => {
+        if (docs) {
           done(true, null);
-        }
-        else {
-          Category.findByIdAndRemove({_id: req.params.id}, (err, doc)=> {
+        } else {
+          Category.findByIdAndRemove(category, (err, doc) => {
             if (!doc) {
               return done(false, null);
             }
             done(err, doc);
-          })
+          });
         }
-      });
-    }], (err)=> {
+      }
+    ], (err) => {
       if (err === true) {
         return res.sendStatus(constant.httpCode.BAD_REQUEST);
       }
@@ -73,22 +69,27 @@ class CategoryController {
     })
   }
 
-  update(req, res, next) {
-    var categoryId = req.params.id;
-
-    Category.findByIdAndUpdate({
-      _id: categoryId
-    }, req.body, function (e, item) {
-      if (e) {
-        return res.next(e);
+  create(req, res, next) {
+    Category.create(req.body, (err, doc) => {
+      if (err) {
+        return next(err);
       }
-      if (!item) {
+      return res.status(constant.httpCode.CREATED).send({uri: `categories/${doc._id}`});
+    });
+  }
+
+  update(req, res, next) {
+    const categoryId = req.params.categoryId;
+
+    Category.findByIdAndUpdate(categoryId, req.body, (err, doc)=> {
+      if (err) {
+        return next(err);
+      }
+      if (!doc) {
         return res.sendStatus(constant.httpCode.NOT_FOUND);
       }
-      res.status(constant.httpCode.NO_CONTENT).send(item);
-
-    })
-
+      return res.sendStatus(constant.httpCode.NO_CONTENT);
+    });
   }
 }
 
