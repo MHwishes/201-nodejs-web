@@ -1,24 +1,15 @@
-const Item = require('../model/item');
-const constant = require('../config/constant');
 const async = require('async');
 
+const Item = require('../model/item');
+const constant = require('../config/constant');
+
 class ItemController {
-
-  create(req, res, next) {
-    Item.create(req.body, (err, item) => {
-      if (err) {
-        res.next(err);
-      }
-      return res.status(constant.httpCode.CREATED).send(item);
-    });
-  }
-
 
   getAll(req, res, next) {
     async.series({
       items: (done)=> {
         Item.find({})
-          .populate('Category')
+          .populate('category')
           .exec(done)
       },
       totalCount: (done)=> {
@@ -33,45 +24,58 @@ class ItemController {
   }
 
   getOne(req, res, next) {
-    var itemId = req.params.id;
+    const itemId = req.params.itemId;
 
-    Item.findById({_id: itemId}, function (e, item) {
-      if (e) {
-        res.next(e);
-      }
-      if (!item) {
-        return res.sendStatus(constant.httpCode.NOT_FOUND);
-      }
-      return res.status(constant.httpCode.OK).send(item);
-    });
+    Item.findById(itemId)
+      .populate('category')
+      .exec((err, doc)=> {
+        if (err) {
+          return next(err);
+        }
+        if (!doc) {
+          return res.sendStatus(constant.httpCode.NOT_FOUND);
+        }
+        return res.status(constant.httpCode.OK).send(doc);
+      });
 
   }
 
   delete(req, res, next) {
-    Item.findByIdAndRemove({_id: req.params.id}, (e, result)=> {
-      if (e) {
-        next(e)
-      }
-      if (!result) {
-        res.sendStatus(constant.httpCode.NOT_FOUND)
-      }
-      res.sendStatus(constant.httpCode.NO_CONTENT);
-    })
-  };
 
-  update(req, res, next) {
-    var itemId = req.params.id;
-    Item.findByIdAndUpdate({
-      _id: itemId
-    }, req.body, function (e, item) {
-      if (e) {
-        res.next(e)
+    const itemId = req.params.itemId;
+
+    Item.findByIdAndRemove(itemId, (err, doc)=> {
+      if (err) {
+        return next(err);
       }
-      if (!item) {
+      if (!doc) {
         return res.sendStatus(constant.httpCode.NOT_FOUND);
       }
-      res.status(constant.httpCode.NO_CONTENT).send(item);
-    })
+      return res.sendStatus(constant.httpCode.NO_CONTENT);
+    });
+  }
+
+
+  create(req, res, next) {
+    Item.create(req.body, (err, doc) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(constant.httpCode.CREATED).send({uri: `items/${doc._id}`});
+    });
+  }
+
+
+  update(req, res, next) {
+    Item.findByIdAndUpdate(req.params.itemId, req.body, (err, doc)=> {
+      if (err) {
+        return next(err);
+      }
+      if (!doc) {
+        return res.sendStatus(constant.httpCode.NOT_FOUND);
+      }
+      return res.sendStatus(constant.httpCode.NO_CONTENT);
+    });
   }
 }
 
