@@ -4,10 +4,10 @@ const ItemController = require('../../controller/item-controller');
 const router = Router();
 const itemCtrl = new ItemController();
 
-router.delete('/:id', itemCtrl.delete);
-router.put('/:id', itemCtrl.update);
 router.get('/', itemCtrl.getAll);
-router.get('/:id', itemCtrl.getOne);
+router.get('/:itemId', itemCtrl.getOne);
+router.delete('/:itemId', itemCtrl.delete);
 router.post('/', itemCtrl.create);
+router.put('/:itemId', itemCtrl.update);
 
 module.exports = router;
