@@ -1,7 +1,7 @@
 const supertest = require('supertest');
 const app = require('../app');
 const request = supertest(app);
-const refresh = require('../tools/refresh-mongo');
+const refresh = require('./refresh-mongo');
 require('should');
 
 describe('CartController', ()=> {
