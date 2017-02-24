@@ -7,13 +7,13 @@ const constant = require('../config/constant');
 class CategoryController {
   getAll(req, res, next) {
     async.series({
-      items: (done)=> {
+      items: (done) => {
         Category.find({}, done);
       },
-      totalCount: (done)=> {
+      totalCount: (done) => {
         Category.count(done);
       }
-    }, (err, result)=> {
+    }, (err, result) => {
       if (err) {
         return next(err);
       }
@@ -22,19 +22,18 @@ class CategoryController {
   }
 
   getOne(req, res, next) {
-
     const categoryId = req.params.categoryId;
-    Category.findById(categoryId, (err, doc)=> {
+    Category.findById(categoryId, (err, doc) => {
       if (err) {
         return next(err);
       }
       if (!doc) {
         return res.sendStatus(constant.httpCode.NOT_FOUND);
       }
+
       return res.status(constant.httpCode.OK).send(doc);
     });
   }
-
 
   delete(req, res, next) {
     const category = req.params.categoryId;
@@ -80,8 +79,7 @@ class CategoryController {
 
   update(req, res, next) {
     const categoryId = req.params.categoryId;
-
-    Category.findByIdAndUpdate(categoryId, req.body, (err, doc)=> {
+    Category.findByIdAndUpdate(categoryId, req.body, (err, doc) => {
       if (err) {
         return next(err);
       }

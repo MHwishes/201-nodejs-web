@@ -1,24 +1,29 @@
+require('should');
 const supertest = require('supertest');
+const express = require('express');
 const app = require('../app');
 const request = supertest(app);
-const refresh = require('./refresh-mongo');
 
-require('should');
+
+const Category = require('../model/category');
+
+
 
 
 describe('CategoryController', ()=> {
-  beforeEach(()=> {
-    refresh();
-  });
 
-  it('GET all categorys', (done) => {
+
+  it('GET /categories should return all category', (done) => {
     request
-      .get('/category')
+      .get('/categories')
       .expect(200)
-      .end(done)
+      .expect((res) => {
+        res.body.totalCount.should.equal(2);
+      })
+      .end(done);
   });
 
-  it('GET one  category', (done) => {
+  it('GET /categories/:categoryId', (done) => {
     const item = {
       "_id": "587f0f2586653d19297d40c8",
       "name": "文具",

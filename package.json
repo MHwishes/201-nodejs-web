@@ -7,7 +7,7 @@
     "babel-node": "babel-node",
     "start": "nodemon --exec npm run babel-node -- app.js",
     "test": "./node_modules/.bin/mocha  spec/*spec.js",
-    "refreshMongo": "node  ./tools/refreshMongo.js"
+    "refreshMongo": "node  ./tool/mongo-tool.js"
   },
   "author": "",
   "license": "ISC",
