@@ -1,17 +1,13 @@
 require('should');
 const supertest = require('supertest');
+
 const express = require('express');
 const app = require('../app');
 const request = supertest(app);
 
-
 const Category = require('../model/category');
 
-
-
-
-describe('CategoryController', ()=> {
-
+describe('CategoryContronller', () => {
 
   it('GET /categories should return all category', (done) => {
     request
@@ -23,49 +19,51 @@ describe('CategoryController', ()=> {
       .end(done);
   });
 
-  it('GET /categories/:categoryId', (done) => {
-    const item = {
-      "_id": "587f0f2586653d19297d40c8",
-      "name": "文具",
-      "__v": 0
-    };
+  it('GET /categories/:categoryId ', (done) => {
     request
-      .get('/category/587f0f2586653d19297d40c8')
+      .get('/categories/587f0f2586653d19297d40c8')
       .expect(200)
       .expect((res) => {
-        res.body._id.should.equal(item._id);
+        res.body.should.eql({
+          "_id": "587f0f2586653d19297d40c8",
+          "name": "文具",
+          "__v": 0
+        });
       })
       .end(done)
+
   });
 
-
-  it('POST insert category should return a category', (done) => {
+  it('POST /categories', (done) => {
     const category = {
-      name: "bbbb"
+      name: '分类一',
     };
+
     request
-      .post('/category')
+      .post('/categories')
       .send(category)
       .expect(201)
+      .expect((res) => {
+        Category.findOne(category, (err, doc) => {
+          res.body.uri.should.equal(`categories/${doc._id}`);
+        })
+      })
+      .end(done);
+  });
+
+  it('DELETE /categories/:categoryId', (done) => {
+    request
+      .delete('/categories/587f0f2586653d19297d40c9')
+      .expect(400)
       .end(done)
   });
 
-  it('DELETE one category', (done)=> {
+  it('PUT /categories/:categoryId shoule return 204', (done) => {
+    const category = {name: '测试分类'};
     request
-      .delete('/category/587f0f2586653d19297d40c9')
+      .put('/categories/587f0f2586653d19297d40c9')
+      .send(category)
       .expect(204)
-      .end(done);
+      .end(done)
   });
-
-  it('PUT one category', (done)=> {
-    const item = {
-      name: "张三"
-    };
-    request
-      .put('/category/587f0f2586653d19297d40c8')
-      .send(item)
-      .expect(204)
-      .end(done);
-  })
-
 });
