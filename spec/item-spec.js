@@ -24,7 +24,7 @@ describe('ItemContronller', () => {
       .get('/items/587f0f2586653d19297d40c2')
       .expect(200)
       .expect((res) => {
-        res.body.should.eql({
+        res.body.should.equal({
           "_id": "587f0f2586653d19297d40c2",
           "name": "钢笔",
           "price": 12,
