@@ -4,6 +4,7 @@ pipeline {
 		stage('build') {
 			steps {
 				sh 'npm install' 
+				sh 'npm refreshMongo' 
 				sh 'npm test'
 		}
 		}
